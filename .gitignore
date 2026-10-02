@@ -1,0 +1,22 @@
+# Environment
+.venv/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.vscode/
+
+# Generated data and reports
+data/processed/*
+!data/processed/.gitkeep
+reports/*
+!reports/.gitkeep
+
+# Power BI local cache
+**/.pbi/
+*.abf
+
+# OS
+Thumbs.db
+.DS_Store
