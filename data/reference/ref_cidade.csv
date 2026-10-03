@@ -1,0 +1,21 @@
+cidade,estado,macro_regiao,latitude,longitude,peso
+São Paulo,SP,Sudeste,-23.5505,-46.6333,14
+Guarulhos,SP,Sudeste,-23.4543,-46.5333,4
+Campinas,SP,Sudeste,-22.9056,-47.0608,7
+Santos,SP,Sudeste,-23.9608,-46.3336,4
+São José dos Campos,SP,Sudeste,-23.2237,-45.9009,4
+Ribeirão Preto,SP,Sudeste,-21.1775,-47.8103,3
+Sorocaba,SP,Sudeste,-23.5015,-47.4526,3
+Rio de Janeiro,RJ,Sudeste,-22.9068,-43.1729,10
+Niterói,RJ,Sudeste,-22.8832,-43.1034,3
+Belo Horizonte,MG,Sudeste,-19.9167,-43.9345,8
+Uberlândia,MG,Sudeste,-18.9186,-48.2772,2
+Juiz de Fora,MG,Sudeste,-21.7642,-43.3503,2
+Curitiba,PR,Sul,-25.4284,-49.2733,6
+Londrina,PR,Sul,-23.3045,-51.1696,2
+Florianópolis,SC,Sul,-27.5954,-48.5480,4
+Joinville,SC,Sul,-26.3045,-48.8487,2
+Balneário Camboriú,SC,Sul,-26.9906,-48.6348,3
+Porto Alegre,RS,Sul,-30.0346,-51.2177,4
+Vitória,ES,Sudeste,-20.3155,-40.3128,2
+Goiânia,GO,Centro-Oeste,-16.6869,-49.2648,3
