@@ -30,6 +30,11 @@ def _require(name: str) -> str:
     return value
 
 
+def get_reference_date() -> date:
+    """Data de referência do projeto (REFERENCE_DATE), sem exigir as credenciais do MySQL."""
+    return date.fromisoformat(os.getenv("REFERENCE_DATE", "2026-09-30"))
+
+
 def load_settings() -> Settings:
     return Settings(
         mysql_host=os.getenv("MYSQL_HOST", "localhost"),
@@ -37,5 +42,5 @@ def load_settings() -> Settings:
         mysql_database=_require("MYSQL_DATABASE"),
         mysql_user=_require("MYSQL_USER"),
         mysql_password=_require("MYSQL_PASSWORD"),
-        reference_date=date.fromisoformat(os.getenv("REFERENCE_DATE", "2026-09-30")),
+        reference_date=get_reference_date(),
     )
