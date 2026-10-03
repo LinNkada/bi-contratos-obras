@@ -61,6 +61,8 @@ class SyntheticParams:
     late_extension_prob: float = 0.20  # prorrogação assinada depois do fim do prazo
     extension_lead_max_days: int = 15  # antecedência máxima da assinatura
     extension_delay_max_days: int = 90  # atraso máximo da assinatura
+    unformalized_extension_prob: float = 0.30  # contratos já prorrogados com a última prorrogação por formalizar
+
 
     # Preço por porta ao mês (fictício)
     base_price_per_door: float = 85.0

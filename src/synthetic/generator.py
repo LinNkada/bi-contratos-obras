@@ -188,14 +188,18 @@ def simulate_timeline(
             "motivo_encerramento": outcome,
         }
     # Contrato ainda ativo: só valem as prorrogações assinadas até a data de referência.
-    known_ends = [end for end, signed_on in chain if signed_on <= p.reference_date]
+    known_ends = sorted(end for end, signed_on in chain if signed_on <= p.reference_date)
+    current_end = known_ends[-1]
+    # A proteção pode seguir instalada depois do prazo, com a última prorrogação ainda
+    # por formalizar. Só vale para contratos que já estão em período de prorrogação.
+    if len(known_ends) > 1 and rng.random() < p.unformalized_extension_prob:
+        current_end = known_ends[-2]
     return {
         "data_fim_prevista_inicial": initial_end,
-        "data_fim_atual": max(known_ends),
+        "data_fim_atual": current_end,
         "data_retirada": None,
         "motivo_encerramento": None,
     }
-
 
 def monthly_value(
     rng: np.random.Generator, p: SyntheticParams, start: date, doors: int
