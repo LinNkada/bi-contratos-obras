@@ -1,10 +1,10 @@
-"""Synthetic data generator for the contracts and works scenario.
+"""Gerador de dados sintéticos do cenário de contratos e obras.
 
-Usage (from the project root):
+Uso (a partir da raiz do projeto):
     python -m src.synthetic.generator
     python -m src.synthetic.generator --seed 7 --out-dir data/raw
 
-Everything is fictitious. Business assumptions live in params.py.
+Tudo é fictício. As premissas de negócio ficam em params.py.
 """
 from __future__ import annotations
 
@@ -58,7 +58,7 @@ CSV_DECIMALS = {"latitude": 6, "longitude": 6, "valor_mensal": 2}
 
 
 # --------------------------------------------------------------------------
-# Helpers
+# Funções auxiliares
 # --------------------------------------------------------------------------
 def load_cities(path: Path = CITIES_PATH) -> pd.DataFrame:
     return pd.read_csv(path, encoding="utf-8")
@@ -77,7 +77,7 @@ def unique_names(
 def jitter_coordinates(
     rng: np.random.Generator, lat: float, lon: float, max_km: float
 ) -> tuple[float, float]:
-    """Move a point up to max_km away from the city center."""
+    """Desloca um ponto até max_km de distância do centro da cidade."""
     radius = max_km * math.sqrt(rng.random())
     angle = rng.random() * 2 * math.pi
     d_lat = radius * math.cos(angle) / KM_PER_DEGREE
@@ -99,6 +99,7 @@ def month_starts(start: date, end: date) -> list[date]:
 
 
 def start_month_weights(p: SyntheticParams, months: list[date]) -> np.ndarray:
+    """Peso de cada mês para sortear inícios de contrato (crescimento e sazonalidade)."""
     raw = np.array(
         [
             (1 + p.annual_growth) ** (i / 12) * p.monthly_seasonality[month.month - 1]
@@ -121,6 +122,7 @@ def draw_start_date(
 def draw_additional_start(
     rng: np.random.Generator, p: SyntheticParams, first_start: date
 ) -> date:
+    """Início de um contrato adicional da mesma obra (simultâneo ou posterior)."""
     if rng.random() < p.simultaneous_contract_prob:
         offset = int(rng.integers(0, 31))
     else:
@@ -129,10 +131,10 @@ def draw_additional_start(
 
 
 # --------------------------------------------------------------------------
-# Contract timeline
+# Linha do tempo do contrato
 # --------------------------------------------------------------------------
 def _signing_offset_days(rng: np.random.Generator, p: SyntheticParams) -> int:
-    """Days between the current term end and the signing of its extension."""
+    """Dias entre o fim do prazo atual e a assinatura da prorrogação."""
     if rng.random() < p.late_extension_prob:
         return int(rng.integers(1, p.extension_delay_max_days + 1))
     return -int(rng.integers(0, p.extension_lead_max_days + 1))
@@ -145,7 +147,7 @@ def build_term_chain(
     initial_end: date,
     actual_end: date,
 ) -> list[tuple[date, date]]:
-    """Original term and each extension, as (term_end, signed_on)."""
+    """Prazo original e cada prorrogação, como (term_end, signed_on)."""
     chain = [(initial_end, start)]
     current_end = initial_end
     while current_end < actual_end:
@@ -163,7 +165,7 @@ def build_term_chain(
 def simulate_timeline(
     rng: np.random.Generator, p: SyntheticParams, start: date
 ) -> dict[str, date | str | None]:
-    """Simulate the real life of a contract and what is visible on the reference date."""
+    """Simula a vida real do contrato e o que fica visível na data de referência."""
     term_days = int(rng.choice(p.term_months, p=p.term_weights)) * DAYS_PER_MONTH
     initial_end = start + timedelta(days=term_days)
 
@@ -185,6 +187,7 @@ def simulate_timeline(
             "data_retirada": actual_end,
             "motivo_encerramento": outcome,
         }
+    # Contrato ainda ativo: só valem as prorrogações assinadas até a data de referência.
     known_ends = [end for end, signed_on in chain if signed_on <= p.reference_date]
     return {
         "data_fim_prevista_inicial": initial_end,
@@ -207,7 +210,7 @@ def monthly_value(
 
 
 # --------------------------------------------------------------------------
-# Tables
+# Tabelas
 # --------------------------------------------------------------------------
 def build_obras(rng: np.random.Generator, p: SyntheticParams, cities: pd.DataFrame) -> pd.DataFrame:
     weights = cities["peso"].to_numpy(dtype=float)
@@ -237,7 +240,7 @@ def build_obras(rng: np.random.Generator, p: SyntheticParams, cities: pd.DataFra
 
 
 def assign_clients(rng: np.random.Generator, p: SyntheticParams) -> np.ndarray:
-    """Client index for each work: everyone owns at least one, a few own many."""
+    """Índice do cliente de cada obra: todos têm ao menos uma, poucos têm muitas."""
     weights = rng.lognormal(0.0, p.client_concentration_sigma, size=p.n_clients)
     weights = weights / weights.sum()
     extra = rng.multinomial(p.n_works - p.n_clients, weights)
@@ -254,7 +257,7 @@ def build_contratos(
     rows = []
     for obra in obras.itertuples(index=False):
         n_contracts = int(rng.choice(p.contracts_per_work, p=p.contracts_per_work_weights))
-        # A small work cannot be split into contracts with almost no doors.
+        # Uma obra pequena não pode ser dividida em contratos com quase nenhuma porta.
         n_contracts = max(1, min(n_contracts, obra.qtd_portas // p.min_doors_per_contract))
         shares = np.ones(1) if n_contracts == 1 else rng.dirichlet(np.full(n_contracts, 4.0))
         first_start = draw_start_date(rng, p, months, weights)
@@ -284,6 +287,7 @@ def build_clientes(
 ) -> pd.DataFrame:
     names = unique_names(rng, CLIENT_PREFIXES, CLIENT_WORDS, p.n_clients)
 
+    # Data do primeiro contrato de cada cliente, para o cadastro nunca ser posterior a ela.
     first_start: dict[str, date] = {}
     merged = contratos.merge(obras[["id_obra", "id_cliente"]], on="id_obra")
     for row in merged.itertuples(index=False):
@@ -307,11 +311,12 @@ def build_clientes(
 
 
 # --------------------------------------------------------------------------
-# Orchestration
+# Orquestração
 # --------------------------------------------------------------------------
 def generate_dataset(
     p: SyntheticParams | None = None, cities_path: Path = CITIES_PATH
 ) -> dict[str, pd.DataFrame]:
+    """Gera as três tabelas. A ordem das chamadas define a sequência de sorteios."""
     p = p or SyntheticParams()
     if p.n_works < p.n_clients:
         raise ValueError("n_works must be at least n_clients")
@@ -332,6 +337,7 @@ def write_csvs(datasets: dict[str, pd.DataFrame], out_dir: Path = OUTPUT_DIR) ->
     out_dir.mkdir(parents=True, exist_ok=True)
     for name, df in datasets.items():
         out = df.copy()
+        # Número de casas decimais fixo para coordenadas e valores.
         for column, decimals in CSV_DECIMALS.items():
             if column in out.columns:
                 out[column] = out[column].map(lambda x, d=decimals: f"{x:.{d}f}")
@@ -341,6 +347,7 @@ def write_csvs(datasets: dict[str, pd.DataFrame], out_dir: Path = OUTPUT_DIR) ->
 
 
 def summarize(datasets: dict[str, pd.DataFrame], reference_date: date) -> None:
+    """Resumo no log para conferir se o cenário gerado é plausível."""
     contratos = datasets["contrato"]
     active = contratos["data_retirada"].isna()
     ended = ~active
