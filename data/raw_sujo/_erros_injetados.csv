@@ -1,0 +1,23 @@
+tabela,linha,id_registro,regras_esperadas,descricao
+cliente,42,CLI-0038,R01,id_cliente duplicado de um cliente existente
+cliente,43,,"R01,R02",id_cliente e nome_cliente vazios
+cliente,44,CLI-9001,R03,data_cadastro com data inexistente
+cliente,14,CLI-0013,R03,data_cadastro posterior à data de referência
+obra,24,OBR-0023,CASCATA,obra do cliente rejeitado
+contrato,26,CTR-0025,CASCATA,contrato de obra rejeitada
+obra,102,OBR-0063,R04,id_obra duplicado de uma obra existente
+obra,103,OBR-9001,"R05,R06",cliente inexistente e nome_obra vazio
+obra,104,OBR-9002,"R07,R10",UF inválida e qtd_portas zero
+obra,105,OBR-9003,"R08,R10",longitude fora do Brasil e qtd_portas não numérica
+obra,106,OBR-9004,"R09,R11",coordenadas a cerca de 55 km da cidade e obra sem contrato
+contrato,160,CTR-0132,R12,id_contrato duplicado de um contrato existente
+contrato,38,,"R12,R13",id_contrato vazio e obra inexistente
+contrato,10,CTR-0009,R14,data_inicio em formato inválido
+contrato,51,CTR-0050,"R15,R16",prazos anteriores ao início do contrato
+contrato,23,CTR-0022,R17,data_retirada anterior ao início
+contrato,73,CTR-0072,"R17,R20",data_retirada no futuro e valor negativo
+contrato,87,CTR-0086,R18,data_retirada sem motivo_encerramento
+contrato,9,CTR-0008,"R18,R19",motivo fora do domínio e sem data_retirada
+contrato,113,CTR-0112,R21,data_inicio posterior à data de referência
+contrato,132,CTR-0131,R22,data_inicio anterior ao cadastro do cliente
+contrato,161,CTR-9001,R23,"contrato igual a outro (mesma obra, início e valor)"
