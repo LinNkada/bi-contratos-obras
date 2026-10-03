@@ -1,4 +1,4 @@
-"""Application settings loaded from environment variables (.env)."""
+"""Configurações da aplicação, lidas das variáveis de ambiente (.env)."""
 from __future__ import annotations
 
 import os
@@ -23,6 +23,7 @@ class Settings:
 
 
 def _require(name: str) -> str:
+    """Lê uma variável obrigatória e falha cedo, com mensagem clara, se faltar."""
     value = os.getenv(name)
     if not value:
         raise RuntimeError(f"Missing required environment variable: {name}")

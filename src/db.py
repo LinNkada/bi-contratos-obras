@@ -1,4 +1,4 @@
-"""Database connection helpers."""
+"""Funções de conexão com o banco de dados."""
 from __future__ import annotations
 
 import logging
@@ -14,7 +14,9 @@ MIN_MYSQL_MAJOR_VERSION = 8
 
 
 def get_engine(settings: Settings | None = None) -> Engine:
+    """Cria a conexão com o MySQL a partir das configurações do .env."""
     settings = settings or load_settings()
+    # URL.create monta a conexão sem quebrar se a senha tiver caracteres especiais.
     url = URL.create(
         drivername="mysql+pymysql",
         username=settings.mysql_user,
@@ -28,6 +30,7 @@ def get_engine(settings: Settings | None = None) -> Engine:
 
 
 def check_connection() -> None:
+    """Testa a conexão e confirma que a versão do MySQL é suficiente."""
     engine = get_engine()
     with engine.connect() as conn:
         version = conn.execute(text("SELECT VERSION()")).scalar_one()
