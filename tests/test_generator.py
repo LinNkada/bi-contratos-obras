@@ -102,3 +102,10 @@ def test_default_scenario_shape():
 
 def test_monthly_value_has_a_sensible_minimum(dataset):
     assert (dataset["contrato"]["valor_mensal"] >= 100).all()
+
+def test_late_extensions_create_overdue_contracts_still_installed():
+    params = SyntheticParams(late_extension_prob=1.0, extension_delay_max_days=90)
+    contracts = generate_dataset(params)["contrato"]
+    active = contracts["data_retirada"].isna()
+    overdue = active & (contracts["data_fim_atual"] < params.reference_date)
+    assert overdue.any()
