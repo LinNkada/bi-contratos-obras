@@ -170,7 +170,11 @@ def test_report_lists_the_rules_found():
     assert "Resumo" in text
     assert "R10" in text
 
-
 def test_generated_csvs_have_no_issues():
     result = validate_all(extract_all(), read_cities(), REF)
     assert result.issues.empty
+
+def test_out_of_brazil_coordinates_do_not_also_trigger_city_alert():
+    result = with_change("obra", 0, "longitude", "10.0")
+    assert ("obra", "R08", REJECT) in found(result)
+    assert ("obra", "R09", ALERT) not in found(result)

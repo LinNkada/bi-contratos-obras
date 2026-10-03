@@ -183,7 +183,7 @@ def validate_obras(
         for row in cities.itertuples(index=False)
     }
     distances = pd.Series(float("nan"), index=df.index, dtype="float64")
-    for idx in df.index[~coords_missing.to_numpy(dtype=bool)]:
+    for idx in df.index[(~coords_missing & in_brazil).to_numpy(dtype=bool)]:
         center = centers.get((city.at[idx], state.at[idx]))
         if center is not None:
             distances.at[idx] = haversine_km(lat.at[idx], lon.at[idx], center[0], center[1])

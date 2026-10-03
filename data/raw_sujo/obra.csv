@@ -1,0 +1,106 @@
+id_obra,id_cliente,nome_obra,cidade,estado,latitude,longitude,qtd_portas
+OBR-0001,CLI-0015,Condomínio Coral,Curitiba,PR,-25.366027,-49.285655,40
+OBR-0002,CLI-0020,Torre Topázio,Rio de Janeiro,RJ,-22.879643,-43.170312,87
+OBR-0003,CLI-0012,Condomínio Bosque Alto,Joinville,SC,-26.315956,-48.874851,13
+OBR-0004,CLI-0034,Torre Diamante,Juiz de Fora,MG,-21.781745,-43.402020,20
+OBR-0005,CLI-0027,Condomínio Praça Nova,São Paulo,SP,-23.539786,-46.666333,66
+OBR-0006,CLI-0030,Condomínio Colina Verde,Goiânia,GO,-16.644910,-49.217494,31
+OBR-0007,CLI-0025,Edifício Jardins,Curitiba,PR,-25.467723,-49.270172,54
+OBR-0008,CLI-0038,Torre Ametista,Londrina,PR,-23.320447,-51.095104,27
+OBR-0009,CLI-0034,Residencial Villa Rica,São Paulo,SP,-23.561156,-46.637501,44
+OBR-0010,CLI-0037,Edifício Coral,Rio de Janeiro,RJ,-22.891932,-43.153303,45
+OBR-0011,CLI-0031,Condomínio Chácara Nova,Ribeirão Preto,SP,-21.235665,-47.853291,25
+OBR-0012,CLI-0002,Condomínio Rubi,Porto Alegre,RS,-30.097704,-51.202548,29
+OBR-0013,CLI-0028,Condomínio Diamante,Belo Horizonte,MG,-19.909272,-43.928035,27
+OBR-0014,CLI-0034,Condomínio Villa Rica,Florianópolis,SC,-27.588417,-48.476046,37
+OBR-0015,CLI-0032,Edifício Mar e Serra,Rio de Janeiro,RJ,-22.869086,-43.217760,135
+OBR-0016,CLI-0002,Torre Rubi,Campinas,SP,-22.938072,-47.025185,74
+OBR-0017,CLI-0028,Residencial Opala,Niterói,RJ,-22.844151,-43.149986,18
+OBR-0018,CLI-0018,Condomínio Jardins,São Paulo,SP,-23.547505,-46.594409,22
+OBR-0019,CLI-0004,Residencial Mirante do Sol,Florianópolis,SC,-27.544157,-48.502988,21
+OBR-0020,CLI-0021,Residencial Terraço,Belo Horizonte,MG,-19.883064,-43.887669,104
+OBR-0021,CLI-0027,Edifício Praça Nova,Curitiba,PR,-25.403639,-49.238467,61
+OBR-0022,CLI-0010,Residencial Coral,São José dos Campos,SP,-23.230028,-45.869837,37
+OBR-0023,CLI-0013,Condomínio Pérola,Goiânia,GO,-16.662693,-49.261422,35
+OBR-0024,CLI-0029,Torre Parque das Águas,Balneário Camboriú,SC,-26.962241,-48.623706,52
+OBR-0025,CLI-0029,Condomínio Vista Linda,Londrina,PR,-23.351036,-51.129594,49
+OBR-0026,CLI-0039,Condomínio Mirante do Sol,Guarulhos,SP,-23.418204,-46.572644,27
+OBR-0027,CLI-0003,Torre Terraço,Rio de Janeiro,RJ,-22.900548,-43.158116,188
+OBR-0028,CLI-0010,Edifício Topázio,São Paulo,SP,-23.582853,-46.650243,49
+OBR-0029,CLI-0039,Torre Belvedere,São Paulo,SP,-23.561679,-46.620891,46
+OBR-0030,CLI-0038,Edifício Bosque Alto,Uberlândia,MG,-18.907127,-48.298169,46
+OBR-0031,CLI-0017,Residencial Morada do Vale,Curitiba,PR,-25.372262,-49.228665,67
+OBR-0032,CLI-0023,Torre Coral,Goiânia,GO,-16.619184,-49.273924,31
+OBR-0033,CLI-0005,Torre Bosque Alto,São José dos Campos,SP,-23.263376,-45.954778,34
+OBR-0034,CLI-0015,Edifício Recanto,Ribeirão Preto,SP,-21.203187,-47.816652,44
+OBR-0035,CLI-0037,Edifício Villa Rica,Rio de Janeiro,RJ,-22.971541,-43.156166,35
+OBR-0036,CLI-0029,Edifício Diamante,Guarulhos,SP,-23.460234,-46.470986,33
+OBR-0037,CLI-0022,Residencial Colina Verde,São Paulo,SP,-23.593558,-46.606269,103
+OBR-0038,CLI-0030,Condomínio Ametista,Rio de Janeiro,RJ,-22.935896,-43.137698,33
+OBR-0039,CLI-0027,Residencial Diamante,Campinas,SP,-22.922991,-47.104995,33
+OBR-0040,CLI-0025,Residencial Belvedere,Uberlândia,MG,-18.858046,-48.314329,104
+OBR-0041,CLI-0023,Condomínio Opala,Rio de Janeiro,RJ,-22.946964,-43.182772,104
+OBR-0042,CLI-0033,Edifício Chácara Nova,Florianópolis,SC,-27.575944,-48.609718,34
+OBR-0043,CLI-0017,Torre Bela Aliança,Juiz de Fora,MG,-21.777776,-43.290500,69
+OBR-0044,CLI-0019,Edifício Esmeralda,Santos,SP,-23.971791,-46.366874,36
+OBR-0045,CLI-0007,Condomínio Quinta das Flores,Florianópolis,SC,-27.548830,-48.512242,109
+OBR-0046,CLI-0016,Condomínio Porto Seguro,Florianópolis,SC,-27.576180,-48.557233,39
+OBR-0047,CLI-0038,Torre Montanhês,Ribeirão Preto,SP,-21.155382,-47.881944,92
+OBR-0048,CLI-0024,Condomínio Terraço,Santos,SP,-23.943019,-46.400395,23
+OBR-0049,CLI-0030,Torre Jardins,Uberlândia,MG,-18.949134,-48.297706,28
+OBR-0050,CLI-0014,Residencial Vista Linda,São Paulo,SP,-23.523726,-46.579136,76
+OBR-0051,CLI-0007,Torre Vista Linda,Guarulhos,SP,-23.507435,-46.520729,47
+OBR-0052,CLI-0008,Condomínio Granada,São Paulo,SP,-23.531374,-46.698565,97
+OBR-0053,CLI-0001,Condomínio Recanto,Londrina,PR,-23.253966,-51.194972,55
+OBR-0054,CLI-0035,Condomínio Morada do Vale,Belo Horizonte,MG,-19.895748,-43.920804,49
+OBR-0055,CLI-0011,Edifício Opala,Juiz de Fora,MG,-21.757122,-43.399782,63
+OBR-0056,CLI-0038,Edifício Parque das Águas,Londrina,PR,-23.271170,-51.196540,46
+OBR-0057,CLI-0034,Edifício Granada,Rio de Janeiro,RJ,-22.931377,-43.142325,37
+OBR-0058,CLI-0036,Torre Granada,Niterói,RJ,-22.866110,-43.078602,69
+OBR-0059,CLI-0037,Torre Colina Verde,São Paulo,SP,-23.585838,-46.598584,90
+OBR-0060,CLI-0004,Residencial Rubi,São Paulo,SP,-23.501303,-46.656069,45
+OBR-0061,CLI-0005,Condomínio Bela Aliança,Uberlândia,MG,-18.954083,-48.240327,83
+OBR-0062,CLI-0016,Edifício Ametista,Rio de Janeiro,RJ,-22.848756,-43.192853,54
+OBR-0063,CLI-0020,Residencial Praça Nova,Niterói,RJ,-22.926378,-43.157977,13
+OBR-0064,CLI-0030,Residencial Safira,Curitiba,PR,-25.449941,-49.329478,42
+OBR-0065,CLI-0039,Torre Opala,Belo Horizonte,MG,-19.894601,-43.980346,20
+OBR-0066,CLI-0026,Residencial Esmeralda,Niterói,RJ,-22.928702,-43.084671,51
+OBR-0067,CLI-0028,Edifício Belvedere,Niterói,RJ,-22.869745,-43.176715,18
+OBR-0068,CLI-0021,Residencial Alameda Real,Santos,SP,-23.908738,-46.387641,31
+OBR-0069,CLI-0033,Torre Recanto,São Paulo,SP,-23.498914,-46.588841,43
+OBR-0070,CLI-0021,Edifício Bela Aliança,Rio de Janeiro,RJ,-22.889555,-43.187042,54
+OBR-0071,CLI-0016,Residencial Granada,Campinas,SP,-22.883640,-47.030842,45
+OBR-0072,CLI-0021,Torre Villa Rica,Sorocaba,SP,-23.474418,-47.471176,53
+OBR-0073,CLI-0031,Edifício Alameda Real,Joinville,SC,-26.290842,-48.848180,63
+OBR-0074,CLI-0030,Residencial Chácara Nova,Campinas,SP,-22.887819,-47.118380,18
+OBR-0075,CLI-0009,Edifício Colina Verde,São Paulo,SP,-23.488503,-46.607875,60
+OBR-0076,CLI-0010,Residencial Recanto,Santos,SP,-23.951215,-46.408620,73
+OBR-0077,CLI-0006,Torre Mirante do Sol,Santos,SP,-23.897096,-46.315631,26
+OBR-0078,CLI-0039,Condomínio Lago Azul,Belo Horizonte,MG,-19.942090,-43.935269,84
+OBR-0079,CLI-0022,Edifício Pérola,Niterói,RJ,-22.849345,-43.153230,29
+OBR-0080,CLI-0034,Edifício Terraço,Londrina,PR,-23.282924,-51.106782,33
+OBR-0081,CLI-0015,Condomínio Topázio,Belo Horizonte,MG,-19.856617,-43.942490,19
+OBR-0082,CLI-0034,Residencial Montanhês,Sorocaba,SP,-23.513993,-47.464811,52
+OBR-0083,CLI-0040,Condomínio Esmeralda,Florianópolis,SC,-27.612378,-48.621802,67
+OBR-0084,CLI-0026,Condomínio Safira,Guarulhos,SP,-23.445473,-46.511614,22
+OBR-0085,CLI-0032,Residencial Topázio,São Paulo,SP,-23.540159,-46.685174,36
+OBR-0086,CLI-0016,Edifício Quinta das Flores,São Paulo,SP,-23.517210,-46.586405,83
+OBR-0087,CLI-0021,Residencial Jardins,Curitiba,PR,-25.463204,-49.293865,72
+OBR-0088,CLI-0037,Edifício Vista Linda,Rio de Janeiro,RJ,-22.852882,-43.195823,49
+OBR-0089,CLI-0004,Torre Mar e Serra,Guarulhos,SP,-23.496503,-46.501626,117
+OBR-0090,CLI-0040,Condomínio Mar e Serra,Rio de Janeiro,RJ,-22.890285,-43.152795,44
+OBR-0091,CLI-0021,Edifício Rubi,São Paulo,SP,-23.586168,-46.614361,48
+OBR-0092,CLI-0002,Residencial Mar e Serra,Juiz de Fora,MG,-21.812884,-43.317864,25
+OBR-0093,CLI-0007,Residencial Quinta das Flores,Rio de Janeiro,RJ,-22.935296,-43.192074,22
+OBR-0094,CLI-0016,Residencial Bela Aliança,Ribeirão Preto,SP,-21.189392,-47.803121,116
+OBR-0095,CLI-0012,Edifício Montanhês,Santos,SP,-23.991457,-46.350024,48
+OBR-0096,CLI-0024,Edifício Morada do Vale,Belo Horizonte,MG,-19.952717,-43.985822,44
+OBR-0097,CLI-0037,Torre Chácara Nova,São José dos Campos,SP,-23.214283,-45.943664,72
+OBR-0098,CLI-0031,Edifício Lago Azul,São Paulo,SP,-23.583664,-46.669941,167
+OBR-0099,CLI-0021,Torre Alameda Real,São Paulo,SP,-23.554793,-46.689239,42
+OBR-0100,CLI-0033,Residencial Lago Azul,Vitória,ES,-20.384452,-40.314479,36
+OBR-0063,CLI-0020,Residencial Praça Nova,Niterói,RJ,-22.926378,-43.157977,13
+OBR-9001,CLI-9999,,Rio de Janeiro,RJ,-22.889555,-43.187042,54
+OBR-9002,CLI-0021,Edifício Rubi,São Paulo,XX,-23.586168,-46.614361,0
+OBR-9003,CLI-0034,Edifício Granada,Rio de Janeiro,RJ,-22.931377,10.0,abc
+OBR-9004,CLI-0039,Condomínio Lago Azul,Belo Horizonte,MG,-19.442090,-43.935269,84

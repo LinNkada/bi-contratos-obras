@@ -1,1 +1,3 @@
 data/raw/*.csv text eol=lf
+
+data/raw_sujo/*.csv text eol=lf
