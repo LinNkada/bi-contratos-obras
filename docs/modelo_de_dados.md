@@ -96,11 +96,13 @@ erDiagram
 
 | Camada | Objetos | Finalidade |
 |---|---|---|
-| Staging | `stg_cliente`, `stg_obra`, `stg_contrato` | Cópia fiel dos CSVs, mais `id_execucao` e `carregado_em` |
-| Dimensões | `dim_calendario`, `dim_cliente`, `dim_obra`, `dim_contrato` | Cadastros limpos. `dim_obra` inclui `macro_regiao`; `dim_contrato` inclui os campos calculados |
+| Referência | `ref_cidade`, `ref_parametro` | Cidades (macrorregião e coordenadas) e parâmetros, como a data de referência |
+| Staging | `stg_cliente`, `stg_obra`, `stg_contrato` | Cópia fiel dos CSVs em texto, com a linha de origem, `id_execucao` e `carregado_em`. Substituída a cada execução |
+| Dimensões | `dim_calendario`, `dim_cliente`, `dim_obra`, `dim_contrato` | Cadastros válidos com tipos reais e restrições. `dim_obra` inclui `macro_regiao` |
 | Fato (view) | `vw_contrato_mes` | Um registro por contrato por mês em que esteve ativo, com `dias_ativos` e `receita_mes`. É a tabela de fatos do Power BI |
-| Qualidade | `dq_execucao`, `dq_rejeitados` | Registro do que foi recebido, aceito e rejeitado, com a regra violada |
-| Apoio | `ref_cidade` | Cidade, UF, macrorregião e coordenadas de referência. Usada pelo gerador e pela validação |
+| Qualidade | `dq_execucao`, `dq_resumo`, `dq_problema` | Histórico das execuções: totais por tabela e cada problema encontrado (rejeições e alertas), com a regra violada |
+
+Em `dim_contrato`, os campos calculados que dependem só da própria linha (status, prorrogado, dias prorrogados, durações e desvio de prazo) são colunas geradas pelo MySQL. O `vencido_em_aberto` e o `status_obra` dependem da data de referência e de outras tabelas, então ficam em views.
 
 ## Decisões de modelagem
 
