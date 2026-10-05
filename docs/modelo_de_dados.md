@@ -99,7 +99,9 @@ erDiagram
 | Referência | `ref_cidade`, `ref_parametro` | Cidades (macrorregião e coordenadas) e parâmetros, como a data de referência |
 | Staging | `stg_cliente`, `stg_obra`, `stg_contrato` | Cópia fiel dos CSVs em texto, com a linha de origem, `id_execucao` e `carregado_em`. Substituída a cada execução |
 | Dimensões | `dim_calendario`, `dim_cliente`, `dim_obra`, `dim_contrato` | Cadastros válidos com tipos reais e restrições. `dim_obra` inclui `macro_regiao` |
-| Fato (view) | `vw_contrato_mes` | Um registro por contrato por mês em que esteve ativo, com `dias_ativos` e `receita_mes`. É a tabela de fatos do Power BI |
+
+| Views | `vw_contrato_mes`, `vw_contrato`, `vw_obra` | `vw_contrato_mes`: um registro por contrato por mês em que esteve ativo, com dias ativos, receita e sinalizadores (tabela de fatos do Power BI). `vw_contrato`: contrato com cliente, obra, vencido em aberto e dias para o vencimento. `vw_obra`: status da obra, carteira ativa e valor por porta |
+
 | Qualidade | `dq_execucao`, `dq_resumo`, `dq_problema` | Histórico das execuções: totais por tabela e cada problema encontrado (rejeições e alertas), com a regra violada |
 
 Em `dim_contrato`, os campos calculados que dependem só da própria linha (status, prorrogado, dias prorrogados, durações e desvio de prazo) são colunas geradas pelo MySQL. O `vencido_em_aberto` e o `status_obra` dependem da data de referência e de outras tabelas, então ficam em views.

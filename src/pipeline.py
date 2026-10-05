@@ -17,7 +17,7 @@ from src.db import get_engine
 from src.etl.extract import RAW_DIR, extract_all, read_cities
 from src.etl.load import fail_execution, load_all, start_execution
 from src.etl.quality import REPORTS_DIR, log_summary, write_reports
-from src.etl.schema import apply_schema, reset_schema
+from src.etl.schema import apply_schema, apply_views, reset_schema
 from src.etl.transform import build_frames, issues_frame, summary_frame
 from src.etl.validate import validate_all
 
@@ -42,6 +42,7 @@ def run_pipeline(
     if reset:
         reset_schema(engine)
     apply_schema(engine)
+    apply_views(engine)
 
     execution_id = start_execution(engine, _display_path(source), reference_date)
     logger.info("Execution %d started (source: %s)", execution_id, _display_path(source))
