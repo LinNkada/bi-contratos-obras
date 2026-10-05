@@ -5,7 +5,14 @@ import pytest
 from sqlalchemy import inspect
 
 from src.db import get_engine
-from src.etl.schema import TABLES_DROP_ORDER, apply_schema, ddl_files, split_statements
+from src.etl.schema import (
+    TABLES_DROP_ORDER,
+    VIEWS_DROP_ORDER,
+    apply_schema,
+    ddl_files,
+    split_statements,
+    view_files,
+)
 
 requires_db = pytest.mark.skipif(
     os.getenv("RUN_DB_TESTS") != "1",
@@ -49,3 +56,12 @@ def test_schema_can_be_applied_twice_and_creates_every_table():
     apply_schema(engine)
     apply_schema(engine)
     assert set(inspect(engine).get_table_names()) >= set(TABLES_DROP_ORDER)
+
+def test_view_files_define_exactly_the_views_listed_for_reset():
+    created = []
+    for path in view_files():
+        for statement in split_statements(path.read_text(encoding="utf-8")):
+            match = re.match(r"CREATE OR REPLACE VIEW (\w+) AS", statement)
+            assert match, path.name
+            created.append(match.group(1))
+    assert sorted(created) == sorted(VIEWS_DROP_ORDER)

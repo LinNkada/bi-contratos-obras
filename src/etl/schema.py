@@ -1,8 +1,8 @@
-"""Criação (e recriação) do esquema do banco a partir dos scripts em sql/ddl.
+"""Criação (e recriação) do esquema do banco a partir dos scripts em sql/.
 
 Uso (a partir da raiz do projeto):
     python -m src.etl.schema            # cria o que faltar (pode repetir sem problema)
-    python -m src.etl.schema --reset    # apaga TODAS as tabelas do projeto e recria
+    python -m src.etl.schema --reset    # apaga TODAS as tabelas e views do projeto e recria
 """
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ from src.db import get_engine
 logger = logging.getLogger(__name__)
 
 DDL_DIR = PROJECT_ROOT / "sql" / "ddl"
+VIEWS_DIR = PROJECT_ROOT / "sql" / "views"
 
 # Ordem de remoção: quem tem chave estrangeira vem antes da tabela que referencia.
 TABLES_DROP_ORDER = (
@@ -27,6 +28,7 @@ TABLES_DROP_ORDER = (
     "dq_problema", "dq_resumo", "dq_execucao",
     "ref_parametro", "ref_cidade",
 )
+VIEWS_DROP_ORDER = ("vw_contrato_mes", "vw_obra", "vw_contrato")
 
 
 def split_statements(script: str) -> list[str]:
@@ -40,21 +42,36 @@ def ddl_files(ddl_dir: Path = DDL_DIR) -> list[Path]:
     return sorted(path for path in ddl_dir.glob("*.sql") if not path.name.startswith("00_"))
 
 
-def apply_schema(engine: Engine, ddl_dir: Path = DDL_DIR) -> None:
-    """Cria as tabelas que ainda não existem. Pode ser repetido sem efeito colateral."""
+def view_files(views_dir: Path = VIEWS_DIR) -> list[Path]:
+    return sorted(views_dir.glob("*.sql"))
+
+
+def _run_scripts(engine: Engine, paths: list[Path]) -> None:
     with engine.begin() as conn:
-        for path in ddl_files(ddl_dir):
+        for path in paths:
             for statement in split_statements(path.read_text(encoding="utf-8")):
                 conn.exec_driver_sql(statement)
             logger.info("Applied %s", path.name)
 
 
+def apply_schema(engine: Engine, ddl_dir: Path = DDL_DIR) -> None:
+    """Cria as tabelas que ainda não existem. Pode ser repetido sem efeito colateral."""
+    _run_scripts(engine, ddl_files(ddl_dir))
+
+
+def apply_views(engine: Engine, views_dir: Path = VIEWS_DIR) -> None:
+    """Cria ou atualiza as views (CREATE OR REPLACE). As tabelas precisam existir."""
+    _run_scripts(engine, view_files(views_dir))
+
+
 def reset_schema(engine: Engine) -> None:
-    """Apaga todas as tabelas do projeto, inclusive os dados e o histórico de qualidade."""
+    """Apaga views e tabelas do projeto, inclusive os dados e o histórico de qualidade."""
     with engine.begin() as conn:
+        for view in VIEWS_DROP_ORDER:
+            conn.exec_driver_sql(f"DROP VIEW IF EXISTS {view}")
         for table in TABLES_DROP_ORDER:
             conn.exec_driver_sql(f"DROP TABLE IF EXISTS {table}")
-    logger.info("Dropped all project tables")
+    logger.info("Dropped all project views and tables")
 
 
 def list_tables(engine: Engine) -> list[str]:
@@ -63,7 +80,7 @@ def list_tables(engine: Engine) -> list[str]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Create or recreate the database schema.")
-    parser.add_argument("--reset", action="store_true", help="drop all project tables first")
+    parser.add_argument("--reset", action="store_true", help="drop all project tables and views first")
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -73,6 +90,7 @@ def main() -> None:
     if args.reset:
         reset_schema(engine)
     apply_schema(engine)
+    apply_views(engine)
     logger.info("Tables: %s", ", ".join(list_tables(engine)))
 
 
