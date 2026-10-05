@@ -48,6 +48,18 @@ Contrato com `valor_mensal` de 10.000,00, `data_inicio` em 16/03/2026 e `data_re
 | Junho | 10 de 30 | 3.333,33 |
 | **Total** | | **28.494,62** |
 
+## Indicadores mensais
+
+Calculados pela view `vw_contrato_mes`, um registro por contrato por mês em que a proteção esteve instalada, até a data de referência. No mês da data de referência, o período termina nela.
+
+- **Ativo no início do mês:** `data_inicio` anterior ao primeiro dia do mês, com a proteção ainda instalada nesse dia.
+- **Iniciou no mês:** `data_inicio` dentro do período do mês.
+- **Retirado no mês:** `data_retirada` dentro do período do mês.
+- **Perdido no mês:** retirado no mês com motivo `cancelado_cliente` ou `rescindido`.
+- **Ativo no fim do mês:** iniciado até o último dia do período e sem retirada até essa data.
+- **Carteira no início e no fim do mês:** soma do `valor_mensal` dos contratos ativos no início e no fim do mês.
+- **Identidade de controle:** ativos no início + iniciados − retirados = ativos no fim.
+
 ## KPIs (a detalhar nas fases indicadas)
 
 | KPI | Definição resumida | Fase |
