@@ -23,6 +23,11 @@ from sqlalchemy.engine import Engine
 from src.config import PROJECT_ROOT
 from src.db import get_engine
 from src.etl.extract import extract_all, read_cities
+from src.etl.indicators import (
+    EXPIRY_TOLERANCES,
+    expiry_indicators_from_pandas,
+    expiry_indicators_from_sql,
+)
 from src.etl.quality import REPORTS_DIR
 from src.etl.validate import validate_all
 
@@ -36,9 +41,8 @@ EXACT_COLUMNS = [
 ]
 MONEY_COLUMNS = ["receita_mes", "carteira_inicio_mes", "carteira_fim_mes", "valor_perdido_mes"]
 MONEY_TOLERANCE = 0.01  # o MySQL arredonda a divisão em 6 casas antes do ROUND
-KPI_TOLERANCES = {"carteira_ativa": 0.005, "receita_total": 0.05}
+KPI_TOLERANCES = {"carteira_ativa": 0.005, "receita_total": 0.05, **EXPIRY_TOLERANCES}
 DIFFERENCE_COLUMNS = ["id_contrato", "mes", "coluna", "pandas", "sql"]
-
 
 # --------------------------------------------------------------------------
 # Lado pandas
@@ -330,8 +334,12 @@ def main() -> None:
     monthly = monthly_from_pandas(contratos, reference_date)
 
     differences = compare_monthly(monthly, monthly_from_sql(engine))
-    kpis = compare_kpis(kpis_from_pandas(obras, contratos, monthly, reference_date), kpis_from_sql(engine))
-
+    expected = {
+        **kpis_from_pandas(obras, contratos, monthly, reference_date),
+        **expiry_indicators_from_pandas(obras, contratos, reference_date),
+    }
+    actual = {**kpis_from_sql(engine), **expiry_indicators_from_sql(engine)}
+    kpis = compare_kpis(expected, actual)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     report_path = args.out_dir / "conferencia_sql_pandas.md"
     report_path.write_text(
