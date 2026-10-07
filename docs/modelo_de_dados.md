@@ -106,6 +106,17 @@ erDiagram
 
 Em `dim_contrato`, os campos calculados que dependem só da própria linha (status, prorrogado, dias prorrogados, durações e desvio de prazo) são colunas geradas pelo MySQL. O `vencido_em_aberto` e o `status_obra` dependem da data de referência e de outras tabelas, então ficam em views.
 
+## Vencimentos e risco
+
+Calculados pela view `vw_vencimento` (um registro por contrato ativo), a partir da data de referência.
+
+- **Faixas:** `vencido_em_aberto` (prazo passado e proteção instalada), `0-30`, `31-60`, `61-90` e `mais_de_90`. Um contrato que vence na própria data de referência fica em `0-30`.
+- **Continuidade do cliente:** o cliente tem outro contrato ativo cujo `data_fim_atual` vai além do deste contrato e da data de referência.
+- **Em risco:** contrato nas faixas de 0 a 90 dias e sem continuidade do cliente.
+- **Prazo inicial resolvido:** o prazo inicial já venceu, ou o contrato já foi encerrado, ou já foi prorrogado. Contratos ainda dentro do prazo inicial ficam fora da taxa de prorrogação, porque o desfecho deles é desconhecido.
+- **Por que a taxa de prorrogação não usa só os encerrados:** contratos prorrogados demoram mais para terminar e ficam sub-representados entre os encerrados, o que subestima a taxa.
+- **Receita a vencer esperada** é uma aproximação: aplica a mesma taxa a todos os contratos, inclusive os que já foram prorrogados.
+
 ## Decisões de modelagem
 
 1. **Localização só na obra.** O cliente não tem coordenadas nem cidade.
