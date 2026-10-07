@@ -28,7 +28,7 @@ TABLES_DROP_ORDER = (
     "dq_problema", "dq_resumo", "dq_execucao",
     "ref_parametro", "ref_cidade",
 )
-VIEWS_DROP_ORDER = ("vw_contrato_mes", "vw_obra", "vw_contrato")
+VIEWS_DROP_ORDER = ("vw_vencimento", "vw_contrato_mes", "vw_obra", "vw_contrato")
 
 
 def split_statements(script: str) -> list[str]:
