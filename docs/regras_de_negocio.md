@@ -72,13 +72,13 @@ Calculados pela view `vw_contrato_mes`, um registro por contrato por mês em que
 | Duração média | Prevista e real, em dias | 5 |
 | Portas em operação | Soma de `qtd_portas` das obras ativas | 5 |
 | Valor mensal por porta | Soma do `valor_mensal` dos contratos ativos da obra ÷ `qtd_portas` | 5 |
-| Receita a vencer | `valor_mensal` dos ativos com `data_fim_atual` em 30, 60 e 90 dias (faixas exclusivas) | 7 |
-| Vencidos em aberto | Quantidade e `valor_mensal` dos contratos nessa situação | 7 |
-| Receita a vencer esperada | A receita a vencer ajustada pela taxa histórica de prorrogação | 7 |
-| Receita em risco | Parte da receita a vencer cujo cliente não tem outro contrato ativo | 7 |
+| Receita a vencer | `valor_mensal` dos ativos por faixa de dias até o `data_fim_atual`: 0-30, 31-60 e 61-90 | 7 |
+| Vencidos em aberto | Quantidade e `valor_mensal` dos ativos com `data_fim_atual` anterior à data de referência | 7 |
+| Receita a vencer esperada | Receita a vencer de 0 a 90 dias × (1 − taxa de prorrogação) | 7 |
+| Receita em risco | Parte da receita a vencer (0 a 90 dias) cujo cliente não tem continuidade | 7 |
 | Churn contratual | Perdas no período ÷ contratos ativos no início (12 meses móveis) | 7 |
 | Churn financeiro | `valor_mensal` das perdas ÷ carteira no início | 7 |
-| Taxa de prorrogação | Contratos encerrados prorrogados ÷ contratos encerrados | 7 |
+| Taxa de prorrogação | Prorrogados ÷ contratos com o prazo inicial resolvido | 7 |
 | Desvio de prazo | Média de `data_retirada` − `data_fim_prevista_inicial` (encerrados) | 7 |
 | Recontratação de clientes | Clientes com novo contrato após o fim de um anterior | 7 |
 | Concentração da carteira | Participação dos 5 maiores clientes na carteira | 8 |
