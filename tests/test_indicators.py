@@ -3,8 +3,7 @@ from datetime import date
 import pandas as pd
 import pytest
 
-from src.etl.indicators import expiry_indicators_from_pandas
-
+from src.etl.indicators import expiry_indicators_from_pandas, rehire_indicators_from_pandas
 REF = date(2026, 9, 30)
 
 
@@ -63,3 +62,29 @@ def test_rates_durations_and_expected_revenue():
     assert kpis["duracao_prevista_media_dias"] == pytest.approx(232.83)
     # (1000 + 3000) x (1 - 0,75)
     assert kpis["receita_a_vencer_esperada_90"] == pytest.approx(1000.0)
+
+def test_rehire_rate_uses_only_complete_windows():
+    obras = pd.DataFrame(
+        {
+            "id_obra": ["OBR-A", "OBR-B", "OBR-C", "OBR-D", "OBR-E"],
+            "id_cliente": ["CLI-1", "CLI-1", "CLI-2", "CLI-3", "CLI-4"],
+        }
+    )
+    contratos = pd.DataFrame(
+        {
+            "id_contrato": ["A", "B", "C", "D", "E"],
+            "id_obra": ["OBR-A", "OBR-B", "OBR-C", "OBR-D", "OBR-E"],
+            "data_inicio": pd.to_datetime(
+                ["2023-10-01", "2024-06-01", "2024-01-01", "2025-12-01", "2026-05-01"]
+            ),
+            "data_retirada": pd.to_datetime(
+                ["2024-01-10", "2025-02-01", "2024-03-01", "2026-06-01", None]
+            ),
+        }
+    )
+    kpis = rehire_indicators_from_pandas(obras, contratos, REF)
+
+    # Janela completa: A, B e C. D encerrou há menos de 12 meses e E está ativo.
+    # Só o A foi recontratado (o cliente CLI-1 iniciou o B em 2024-06-01).
+    assert kpis["recontratacao_base"] == 3
+    assert kpis["taxa_recontratacao_12m"] == pytest.approx(0.3333, abs=1e-4)

@@ -27,9 +27,17 @@ from src.etl.indicators import (
     EXPIRY_TOLERANCES,
     expiry_indicators_from_pandas,
     expiry_indicators_from_sql,
+    rehire_indicators_from_pandas,
+    rehire_indicators_from_sql,
 )
 from src.etl.quality import REPORTS_DIR
 from src.etl.validate import validate_all
+from src.etl.monthly_kpis import (
+    compare_monthly_kpis,
+    latest_churn,
+    monthly_kpis_from_pandas,
+    monthly_kpis_from_sql,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -315,7 +323,6 @@ def format_reconciliation(
             lines.append(f"| {row.id_contrato} | {row.mes:%Y-%m} | {row.coluna} | {row.pandas} | {row.sql} |")
     return "\n".join(lines) + "\n"
 
-
 def main() -> None:
     parser = argparse.ArgumentParser(description="Reconcile the MySQL views with an independent pandas calculation.")
     parser.add_argument("--source", type=Path, default=None, help="CSV folder (default: the last successful run)")
@@ -332,14 +339,37 @@ def main() -> None:
     result = validate_all(extract_all(source), read_cities(), reference_date)
     obras, contratos = result.obras.valid, result.contratos.valid
     monthly = monthly_from_pandas(contratos, reference_date)
+    kpi_monthly = monthly_kpis_from_pandas(monthly, reference_date)
+    kpi_monthly_sql = monthly_kpis_from_sql(engine)
 
-    differences = compare_monthly(monthly, monthly_from_sql(engine))
+    difference_frames = [
+        frame
+        for frame in (
+            compare_monthly(monthly, monthly_from_sql(engine)),
+            compare_monthly_kpis(kpi_monthly, kpi_monthly_sql),
+        )
+        if not frame.empty
+    ]
+    differences = (
+        pd.concat(difference_frames, ignore_index=True)
+        if difference_frames
+        else pd.DataFrame(columns=DIFFERENCE_COLUMNS)
+    )
+
     expected = {
         **kpis_from_pandas(obras, contratos, monthly, reference_date),
         **expiry_indicators_from_pandas(obras, contratos, reference_date),
+        **rehire_indicators_from_pandas(obras, contratos, reference_date),
+        **latest_churn(kpi_monthly),
     }
-    actual = {**kpis_from_sql(engine), **expiry_indicators_from_sql(engine)}
+    actual = {
+        **kpis_from_sql(engine),
+        **expiry_indicators_from_sql(engine),
+        **rehire_indicators_from_sql(engine),
+        **latest_churn(kpi_monthly_sql),
+    }
     kpis = compare_kpis(expected, actual)
+
     args.out_dir.mkdir(parents=True, exist_ok=True)
     report_path = args.out_dir / "conferencia_sql_pandas.md"
     report_path.write_text(
@@ -348,7 +378,7 @@ def main() -> None:
     )
     ok = differences.empty and bool(kpis["ok"].all())
     logger.info(
-        "Monthly rows compared: %d | monthly differences: %d | diverging indicators: %d",
+        "Monthly rows compared: %d | differences: %d | diverging indicators: %d",
         len(monthly), len(differences), int((~kpis["ok"]).sum()),
     )
     logger.info("Report written to %s", report_path)

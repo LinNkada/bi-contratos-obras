@@ -27,6 +27,10 @@ EXPIRY_TOLERANCES = {
     "desvio_prazo_medio_dias": 0.011,
     "duracao_prevista_media_dias": 0.011,
     "duracao_real_media_dias": 0.011,
+    "churn_contratual_12m": 0.00002,
+    "churn_financeiro_12m": 0.00002,
+    "recontratacao_base": 0.0,
+    "taxa_recontratacao_12m": 0.0002,
 }
 
 _RESOLVED_SQL = (
@@ -142,3 +146,35 @@ def expiry_indicators_from_sql(engine: Engine) -> dict[str, float]:
     kpis["duracao_prevista_media_dias"] = round(_number(totals[5]), 2)
     kpis["duracao_real_media_dias"] = round(_number(totals[6]), 2)
     return kpis
+
+def rehire_indicators_from_pandas(
+    obras: pd.DataFrame, contratos: pd.DataFrame, reference_date: date
+) -> dict[str, float]:
+    """Entre os encerrados com janela de 12 meses completa, quantos o cliente recontratou."""
+    reference = pd.Timestamp(reference_date)
+    year = pd.Timedelta(days=365)
+    owner = obras.set_index("id_obra")["id_cliente"]
+    frame = contratos.assign(id_cliente=contratos["id_obra"].map(owner))
+    starts = frame.groupby("id_cliente")["data_inicio"].apply(list)
+
+    ended = frame[frame["data_retirada"].notna()]
+    base = ended[ended["data_retirada"] <= reference - year]
+    rehired = sum(
+        any(row.data_retirada < start <= row.data_retirada + year for start in starts[row.id_cliente])
+        for row in base.itertuples(index=False)
+    )
+    rate = rehired / len(base) if len(base) else 0.0
+    return {"recontratacao_base": float(len(base)), "taxa_recontratacao_12m": round(rate, 4)}
+
+
+def rehire_indicators_from_sql(engine: Engine) -> dict[str, float]:
+    with engine.connect() as conn:
+        base, rehired = conn.execute(
+            text(
+                "SELECT COUNT(*), COALESCE(SUM(recontratou_em_12m), 0) "
+                "FROM vw_recontratacao WHERE janela_completa = 1"
+            )
+        ).one()
+    base, rehired = int(base), float(rehired)
+    rate = rehired / base if base else 0.0
+    return {"recontratacao_base": float(base), "taxa_recontratacao_12m": round(rate, 4)}
